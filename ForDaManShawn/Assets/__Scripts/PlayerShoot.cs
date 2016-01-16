@@ -12,6 +12,8 @@ public class PlayerShoot : MonoBehaviour
     List<Vector3> laserPoints;
     public bool lockedOn;
     public int pointCount;
+	public float rayDistance = 50;
+	public bool inCollider;
 
     // Use this for initialization
     void Start()
@@ -20,8 +22,9 @@ public class PlayerShoot : MonoBehaviour
         areaOfEffect = GetComponentInChildren<Collider>();
         laser = GetComponent<LineRenderer>();
         laser.SetVertexCount(pointCount);
-
+		laserPoints = new List<Vector3>();
         lockedOn = false;
+		inCollider = false;
     }
 
     void renderLaser(GameObject target)
@@ -54,16 +57,16 @@ public class PlayerShoot : MonoBehaviour
         {
             renderLaser(target);
         }
-        else if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && (!lockedOn || inCollider))
         {
-            Debug.DrawRay(gameObject.transform.position, areaOfEffect.bounds.max * 2, Color.green, 1, false);
-            if (Physics.Raycast(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, areaOfEffect.bounds.max.z))
+			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
+            if (Physics.Raycast(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~(1 << LayerMask.NameToLayer("Player"))))
             {
-                if (hitInfo.collider.gameObject.tag == "Enemy")
-                {
-                    lockedOn = true;
-                    target = hitInfo.collider.gameObject;
-                }
+				print("DRRRRRURURURURURURURURU");
+				if (hitInfo.collider.gameObject.tag == "Enemy") {
+					lockedOn = true;
+					target = hitInfo.collider.gameObject;
+				}
             }
         }
         else
@@ -71,4 +74,20 @@ public class PlayerShoot : MonoBehaviour
             lockedOn = false;
         }
     }
+
+	void OnTriggerStay(Collider other) {
+		if (target != null) {
+			if (other.gameObject == target)
+				inCollider = true;
+		}	
+	}
+
+	void OnTriggerExit(Collider other) {
+		if (target != null) {
+			if (other.gameObject == target) {
+				inCollider = false;
+				target = null;
+			}
+		}
+	}
 }
