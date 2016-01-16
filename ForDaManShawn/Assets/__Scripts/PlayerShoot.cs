@@ -10,11 +10,15 @@ public class PlayerShoot : MonoBehaviour
     Collider areaOfEffect;
     LineRenderer laser;
     List<Vector3> laserPoints;
+    SpriteRenderer crosshairs;
     public bool lockedOn;
     public bool buttonPressed;
     public int pointCount;
 	public float rayDistance = 20;
 	public bool inCollider;
+    public Sprite treasure;
+    public Sprite attack;
+    public Sprite normal;
 
     EnergyManage energyManager;
 
@@ -25,6 +29,7 @@ public class PlayerShoot : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<Camera>();
         areaOfEffect = GetComponentInChildren<Collider>();
+        crosshairs = GetComponentInChildren<SpriteRenderer>();
         energyManager = GetComponent<EnergyManage>();
         laser = GetComponent<LineRenderer>();
         laser.SetVertexCount(pointCount);
@@ -32,7 +37,6 @@ public class PlayerShoot : MonoBehaviour
         lockedOn = false;
         buttonPressed = false;
 		inCollider = false;
-
 		laser.enabled = false;
     }
 
@@ -50,14 +54,16 @@ public class PlayerShoot : MonoBehaviour
         }
 
         //Change laser based on target
-        if (target.tag == "ForceField")
-            laser.material = shootForceField;
-        else
-            laser.material = shootEnemy;
-
         laser.material = new Material(Shader.Find("Particles/Additive"));
         Color start = Color.white;
         Color end = Color.white;
+        if (target.tag == "ForceField") {
+            start = Color.red;
+            end = Color.red;
+        } else {
+            start = Color.blue;
+            end = Color.blue;
+        }
         if (energyManager.playerEnergy > 500) {
             start.a = 1f;
             end.a = 1f;
@@ -122,10 +128,20 @@ public class PlayerShoot : MonoBehaviour
         {
             renderLaser(target);
         }
+        bool hitSomething = Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("MusicTrigger"))));
+        if (hitSomething) {
+            if (hitInfo.collider.gameObject.tag == "Enemy") {
+                crosshairs.sprite = treasure;
+            } else if (hitInfo.collider.gameObject.tag == "ForceField") {
+                crosshairs.sprite = attack;
+            } else {
+                crosshairs.sprite = normal;
+            }
+        }
         if ((Input.GetMouseButtonDown(0) || (buttonPressed && Input.GetMouseButton(0))) && (!lockedOn || inCollider))
         {
 			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
-            if (Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("MusicTrigger")))))
+            if (hitSomething)
             {
                 if (hitInfo.collider.gameObject.tag == "Enemy" || hitInfo.collider.gameObject.tag == "ForceField") {
 					lockedOn = true;
