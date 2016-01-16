@@ -15,14 +15,32 @@ public class PlayerAim : MonoBehaviour {
 
 	void Awake() {
 		playerTransform = transform.parent;
-	}
-	// Use this for initialization
-	void Start () {
-	
+		print(transform.parent);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		//Get mouse movement input
+		x += Input.GetAxis("Mouse X") * xSensitivity;
+		y -= Input.GetAxis("Mouse Y") * ySensitivity;
+
+		y = ClampRotation(y);
+
+		//Rotate the player in the y-direction but only the camera in the x-direction
+		playerTransform.rotation = Quaternion.Euler(0, x, 0);
+		transform.rotation = Quaternion.Euler(y, x, 0);
+	}
+
+	float ClampRotation(float angle) {
+		//Ensure that the angle starts between -360 and 360 degrees
+		if (angle < -360) {
+			angle += 360;
+		}
+		else if (angle > 360) {
+			angle -= 360;
+		}
+
+		//Clamp the angle between yAimMin and yAimMax
+		return Mathf.Clamp(angle, yAimMin, yAimMax);
 	}
 }
