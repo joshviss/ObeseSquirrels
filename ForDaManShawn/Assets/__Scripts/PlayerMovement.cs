@@ -12,7 +12,8 @@ public class PlayerMovement : MonoBehaviour {
 	float acc_c = 50f;              //How fast we get up to speed (horizontally)
 	float maxJumpDuration_c = 1f;   //Maximum amount of time to apply a force to the jump
 	float jumpImpulseForce_c = 6f;  //Initial impulse force applied to the jump
-	float jumpAcc_c = 5.5f;			//Acceleration force applied to jumps when the button is held
+	float jumpAcc_c = 5.5f;         //Acceleration force applied to jumps when the button is held
+
 
 	// Use this for initialization
 	void Awake () {
@@ -108,15 +109,15 @@ public class PlayerMovement : MonoBehaviour {
 			float distance = 0.1f;
 
 			//Debug rays
-			Debug.DrawRay(FLRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			Debug.DrawRay(FRRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			Debug.DrawRay(BLRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			Debug.DrawRay(BRRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			//Debug.DrawRay(FLRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			//Debug.DrawRay(FRRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			//Debug.DrawRay(BLRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			//Debug.DrawRay(BRRayOrigin, Vector3.down * distance, Color.white, 0, false);
 
-			return (Physics.Raycast(FLRayOrigin, Vector3.down, distance) ||
-					Physics.Raycast(FRRayOrigin, Vector3.down, distance) ||
-					Physics.Raycast(BLRayOrigin, Vector3.down, distance) ||
-					Physics.Raycast(BRRayOrigin, Vector3.down, distance));
+			return (Physics.Raycast(FLRayOrigin, -transform.up, distance) ||
+					Physics.Raycast(FRRayOrigin, -transform.up, distance) ||
+					Physics.Raycast(BLRayOrigin, -transform.up, distance) ||
+					Physics.Raycast(BRRayOrigin, -transform.up, distance));
         }
 	}
 }
