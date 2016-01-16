@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class laserParticles : MonoBehaviour {
+public class LaserParticles : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
