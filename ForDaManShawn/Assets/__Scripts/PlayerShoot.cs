@@ -130,9 +130,9 @@ public class PlayerShoot : MonoBehaviour
         }
         bool hitSomething = Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("PlayerAreaOfEffect")) | (1 << LayerMask.NameToLayer("MusicTrigger") | (1 << LayerMask.NameToLayer("Landscape")))));
         if (hitSomething) {
-            if (hitInfo.collider.gameObject.tag == "Enemy" && !laser.enabled) {
+            if (hitInfo.collider.gameObject.tag == "Enemy") {
                 crosshairs.sprite = treasure;
-            } else if ((hitInfo.collider.gameObject.tag == "ForceField") && (energyManager.playerEnergy > 0) && !laser.enabled) {
+            } else if ((hitInfo.collider.gameObject.tag == "ForceField") && (energyManager.playerEnergy > 0)) {
                 crosshairs.sprite = attack;
             }
         } else {
