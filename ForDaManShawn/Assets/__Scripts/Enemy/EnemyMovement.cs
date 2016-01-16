@@ -38,8 +38,9 @@ public class EnemyMovement : MonoBehaviour {
 				percentComp = 1;
 			}
 
-			//lerps across the patrol path
-			transform.position = Vector3.Lerp(curPoint, patrolPoint, percentComp);
+            if (curPoint != patrolPoint)
+			    //lerps across the patrol path
+			    transform.position = Vector3.Lerp(curPoint, patrolPoint, percentComp);
 
 			//checks every fixed frame
 			yield return new WaitForFixedUpdate();
@@ -68,9 +69,9 @@ public class EnemyMovement : MonoBehaviour {
 			if (percentComp > 1) {
 				percentComp = 1;
 			}
-
-			//lerps across the patrol path
-			transform.position = Vector3.Lerp(curPoint, startPoint, percentComp);
+            if (curPoint != startPoint)
+			    //lerps across the patrol path
+			    transform.position = Vector3.Lerp(curPoint, startPoint, percentComp);
 
 			//checks every fixed frame
 			yield return new WaitForFixedUpdate();
