@@ -38,6 +38,7 @@ public class PlayerShoot : MonoBehaviour
 
     void renderLaser(GameObject target)
     {
+		print("renderLaser");
         //Don't render the laser if the target was destroyed
         //or if the player has no energy and is shooting the force field
         if (target == null || (target.tag == "ForceField" && energyManager.playerEnergy <= 0)) {
@@ -99,6 +100,9 @@ public class PlayerShoot : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+		if (target != null) {
+			energyManager.TransferEnergy(target);
+		}
         if (lockedOn)
         {
             renderLaser(target);
@@ -112,7 +116,6 @@ public class PlayerShoot : MonoBehaviour
 					lockedOn = true;
                     buttonPressed = true;
                     target = hitInfo.collider.gameObject;
-                    energyManager.TransferEnergy(hitInfo.collider.gameObject);
                 }
             }
         }

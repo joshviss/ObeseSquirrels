@@ -18,7 +18,7 @@ public class EnergyManage : MonoBehaviour {
         }
         else if (target.tag == "ForceField") {
             playerEnergy -= 2 * energyTransferRate;
-            target.GetComponent<ForceFieldHealth>().curHealth -= 2 * energyTransferRate;
+            target.GetComponentInParent<Forcefield>().health -= 2 * energyTransferRate;
 
             if (playerEnergy < 0) playerEnergy = 0;
         }

@@ -19,7 +19,7 @@ public class Forcefield : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Debug health draining
-		health -= 10 * Time.deltaTime;
+		//health -= 10 * Time.deltaTime;
 
 		if (healthLastFrame != health) {
 			healthLastFrame = health;
