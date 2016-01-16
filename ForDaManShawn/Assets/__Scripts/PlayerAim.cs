@@ -28,7 +28,7 @@ public class PlayerAim : MonoBehaviour {
 		playerGravity = playerTransform.GetComponent<GravityTest>();
 
 		//Hide the mouse and lock it to the screen
-		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 
 		//the player is not currently flipping
@@ -66,17 +66,6 @@ public class PlayerAim : MonoBehaviour {
 				playerTransform.rotation = Quaternion.Euler(0, x, 0);
 				transform.rotation = Quaternion.Euler(y, x, 0);
 			}
-
-			/*
-			//changes the orientation of the player TEST TODO
-			if (testNum == 0) {
-				print("hello");
-				Vector3 targetUp = new Vector3(0, -1, 0);
-				float damping = 8;
-				gameObject.transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);
-				testNum += 1;
-			}
-			 */
 		}
 	}
 
