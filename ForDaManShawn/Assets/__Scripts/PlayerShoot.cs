@@ -16,13 +16,16 @@ public class PlayerShoot : MonoBehaviour
 	public float rayDistance = 20;
 	public bool inCollider;
 
-    public LayerMask ignoreLayers;
+    EnergyManage energyManager;
+
+    public Material shootEnemy, shootForceField;
 
     // Use this for initialization
     void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
         areaOfEffect = GetComponentInChildren<Collider>();
+        energyManager = GetComponent<EnergyManage>();
         laser = GetComponent<LineRenderer>();
         laser.SetVertexCount(pointCount);
 		laserPoints = new List<Vector3>();
@@ -35,6 +38,22 @@ public class PlayerShoot : MonoBehaviour
 
     void renderLaser(GameObject target)
     {
+        //Don't render the laser if the target was destroyed
+        //or if the player has no energy and is shooting the force field
+        if (target == null || (target.tag == "ForceField" && energyManager.playerEnergy <= 0)) {
+            lockedOn = false;
+            inCollider = false;
+            laser.enabled = false;
+            buttonPressed = false;
+            return;
+        }
+
+        //Change laser based on target
+        if (target.tag == "ForceField")
+            laser.material = shootForceField;
+        else
+            laser.material = shootEnemy;
+
 		laser.enabled = true;
         laserPoints.Clear();
         Vector3 positionDiff = target.transform.position - gameObject.transform.position;
@@ -78,7 +97,7 @@ public class PlayerShoot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (lockedOn)
         {
@@ -89,14 +108,13 @@ public class PlayerShoot : MonoBehaviour
 			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
             if (Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("MusicTrigger")))))
             {
-                print("Colliding with object: " + hitInfo.collider.gameObject.name);
-                if (hitInfo.collider.gameObject.tag == "Enemy") {
+                if (hitInfo.collider.gameObject.tag == "Enemy" || hitInfo.collider.gameObject.tag == "ForceField") {
 					lockedOn = true;
                     buttonPressed = true;
                     target = hitInfo.collider.gameObject;
+                    energyManager.TransferEnergy(hitInfo.collider.gameObject);
                 }
             }
-            
         }
         else
         {
@@ -108,8 +126,9 @@ public class PlayerShoot : MonoBehaviour
 
 	void OnTriggerStay(Collider other) {
 		if (target != null) {
-			if (other.gameObject == target)
-				inCollider = true;
+            if (other.gameObject == target) {
+                inCollider = true;  
+            }
 		}	
 	}
 
