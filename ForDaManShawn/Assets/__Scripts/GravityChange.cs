@@ -20,6 +20,6 @@ public class GravityChange : MonoBehaviour {
 		Physics.gravity = gravityDirection * gravityMagnitude;
 
 		//Rotate the player so that gravity direction is down
-		//GameManager.S.playerMovement.Rotate(-gravityDirection);
+		GameManager.S.playerMovement.gameObject.GetComponentInChildren<PlayerAim>().Rotate(-gravityDirection);
 	}
 }
