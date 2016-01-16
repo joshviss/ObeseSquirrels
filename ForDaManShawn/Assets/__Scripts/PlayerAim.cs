@@ -11,7 +11,12 @@ public class PlayerAim : MonoBehaviour {
 
 	float x, y;
 
+	float[,] originalMatrix;
+	float[,] rotationMatrix;
+
 	Transform playerTransform;
+
+	Quaternion desiredRotation;
 
 	void Awake() {
 		playerTransform = transform.parent;
@@ -27,7 +32,7 @@ public class PlayerAim : MonoBehaviour {
 
 		//Rotate the player in the y-direction but only the camera in the x-direction
 		playerTransform.rotation = Quaternion.Euler(0, x, 0);
-		transform.rotation = Quaternion.Euler(y, x, 0);
+		transform.localRotation = Quaternion.Euler(y, x, 0);
 	}
 
 	float ClampRotation(float angle) {
@@ -41,5 +46,35 @@ public class PlayerAim : MonoBehaviour {
 
 		//Clamp the angle between yAimMin and yAimMax
 		return Mathf.Clamp(angle, yAimMin, yAimMax);
+	}
+
+	public void Rotate(Vector3 targetRotation) {
+		print(desiredRotation);
+		desiredRotation = Quaternion.Euler(targetRotation);
+		print(desiredRotation);
+	}
+
+	void SetUpMatrices() {
+		Quaternion curRot = transform.rotation;
+		//Set up the originalMatrix
+		originalMatrix = new float[4, 4];
+		originalMatrix[0, 0] = 1 - curRot.y * curRot.y - curRot.z*curRot.z;
+		originalMatrix[0, 1] = curRot.x * curRot.y - curRot.w * curRot.z;
+		originalMatrix[0, 2] = curRot.x * curRot.z + curRot.y * curRot.w;
+		originalMatrix[0, 3] = 0;
+		originalMatrix[1, 0] = curRot.x * curRot.y + curRot.w * curRot.z;
+		originalMatrix[1, 1] = 1 - curRot.x * curRot.x - curRot.z * curRot.z;
+		originalMatrix[1, 2] = curRot.y * curRot.z - curRot.w * curRot.x;
+		originalMatrix[1, 3] = 0;
+		originalMatrix[2, 0] = curRot.w * curRot.z - curRot.w * curRot.y;
+		originalMatrix[2, 1] = curRot.y * curRot.z + curRot.w * curRot.x;
+		originalMatrix[2, 2] = 1 - curRot.x * curRot.x - curRot.y * curRot.y;
+		originalMatrix[2, 3] = 0;
+		originalMatrix[3, 0] = 0;
+		originalMatrix[3, 1] = 0;
+		originalMatrix[3, 2] = 0;
+		originalMatrix[3, 3] = 1;
+
+		rotationMatrix = new float[4, 4];
 	}
 }
