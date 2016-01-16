@@ -33,7 +33,7 @@ public class PlayerAim : MonoBehaviour {
 
 		//Rotate the player in the y-direction but only the camera in the x-direction
 		playerTransform.rotation = Quaternion.Euler(0, x, 0);
-		transform.localRotation = Quaternion.Euler(y, x, 0);
+		transform.rotation = Quaternion.Euler(y, x, 0);
     }
 
 	float ClampRotation(float angle) {
