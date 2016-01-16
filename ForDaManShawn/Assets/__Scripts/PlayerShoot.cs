@@ -11,19 +11,26 @@ public class PlayerShoot : MonoBehaviour
     LineRenderer laser;
     List<Vector3> laserPoints;
     public bool lockedOn;
+    public bool buttonPressed;
     public int pointCount;
 	public float rayDistance = 20;
 	public bool inCollider;
+
+    EnergyManage energyManager;
+
+    public Material shootEnemy, shootForceField;
 
     // Use this for initialization
     void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
         areaOfEffect = GetComponentInChildren<Collider>();
+        energyManager = GetComponent<EnergyManage>();
         laser = GetComponent<LineRenderer>();
         laser.SetVertexCount(pointCount);
 		laserPoints = new List<Vector3>();
         lockedOn = false;
+        buttonPressed = false;
 		inCollider = false;
 
 		laser.enabled = false;
@@ -31,6 +38,22 @@ public class PlayerShoot : MonoBehaviour
 
     void renderLaser(GameObject target)
     {
+        //Don't render the laser if the target was destroyed
+        //or if the player has no energy and is shooting the force field
+        if (target == null || (target.tag == "ForceField" && energyManager.playerEnergy <= 0)) {
+            lockedOn = false;
+            inCollider = false;
+            laser.enabled = false;
+            buttonPressed = false;
+            return;
+        }
+
+        //Change laser based on target
+        if (target.tag == "ForceField")
+            laser.material = shootForceField;
+        else
+            laser.material = shootEnemy;
+
 		laser.enabled = true;
         laserPoints.Clear();
         Vector3 positionDiff = target.transform.position - gameObject.transform.position;
@@ -74,34 +97,38 @@ public class PlayerShoot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (lockedOn)
         {
             renderLaser(target);
         }
-        if (Input.GetMouseButton(0) && (!lockedOn || inCollider))
+        if ((Input.GetMouseButtonDown(0) || (buttonPressed && Input.GetMouseButton(0))) && (!lockedOn || inCollider))
         {
-			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * 20, Color.blue, 0, true);
-            if (Physics.SphereCast(gameObject.transform.position, 5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~(1 << LayerMask.NameToLayer("Player"))))
+			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
+            if (Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("MusicTrigger")))))
             {
-				if (hitInfo.collider.gameObject.tag == "Enemy") {
+                if (hitInfo.collider.gameObject.tag == "Enemy" || hitInfo.collider.gameObject.tag == "ForceField") {
 					lockedOn = true;
-					target = hitInfo.collider.gameObject;
-				}
+                    buttonPressed = true;
+                    target = hitInfo.collider.gameObject;
+                    energyManager.TransferEnergy(hitInfo.collider.gameObject);
+                }
             }
         }
         else
         {
             lockedOn = false;
 			laser.enabled = false;
+            buttonPressed = false;
         }
     }
 
 	void OnTriggerStay(Collider other) {
 		if (target != null) {
-			if (other.gameObject == target)
-				inCollider = true;
+            if (other.gameObject == target) {
+                inCollider = true;  
+            }
 		}	
 	}
 
@@ -112,6 +139,7 @@ public class PlayerShoot : MonoBehaviour
 				target = null;
 				lockedOn = false;
 				laser.enabled = false;
+                buttonPressed = false;
 			}
 		}
 	}
