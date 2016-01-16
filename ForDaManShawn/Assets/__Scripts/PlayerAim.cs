@@ -37,7 +37,11 @@ public class PlayerAim : MonoBehaviour {
 		//Rotate the player in the y-direction but only the camera in the x-direction
 		playerTransform.rotation = Quaternion.Euler(0, x, 0);
 		transform.rotation = Quaternion.Euler(y, x, 0);
-	}
+
+        //Set the cursor back to visible if you hit escape
+        if (Input.GetKeyUp(KeyCode.Escape))
+            Cursor.visible = !Cursor.visible;
+    }
 
 	float ClampRotation(float angle) {
 		//Ensure that the angle starts between -360 and 360 degrees
