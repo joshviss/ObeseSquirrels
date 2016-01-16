@@ -15,7 +15,6 @@ public class PlayerAim : MonoBehaviour {
 
 	void Awake() {
 		playerTransform = transform.parent;
-		print(transform.parent);
 	}
 	
 	// Update is called once per frame

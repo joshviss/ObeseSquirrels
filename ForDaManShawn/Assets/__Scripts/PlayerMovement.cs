@@ -4,6 +4,9 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
 	Rigidbody thisRigidbody;
 
+	float colliderHeight;           //Determined once then stored so we don't have to check the collider component often
+	float colliderRadius;
+
 	//constants
 	float movespeed_c = 5f;         //Cap for horizontal movement speed
 	float acc_c = 50f;              //How fast we get up to speed (horizontally)
@@ -14,10 +17,13 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		thisRigidbody = GetComponent<Rigidbody>();
+		colliderHeight = GetComponent<CapsuleCollider>().height;
+		colliderRadius = GetComponent<CapsuleCollider>().radius;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (IsGrounded) { }
 		//Movement controls
 		if (Input.GetKey("w")) {
 			Move(transform.forward);
@@ -37,7 +43,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		//Jump input
-		if (Input.GetKeyDown("space")) {
+		if (Input.GetKeyDown("space") && IsGrounded) {
 			Jump();
 		}
 
@@ -77,5 +83,40 @@ public class PlayerMovement : MonoBehaviour {
 			timeSinceJump += Time.fixedDeltaTime;
 			yield return new WaitForFixedUpdate();
 		}
+	}
+
+	bool IsGrounded {
+		get {
+			float leeway = 0.05f;
+
+			//F == Front, R == Right, B == Back, L == Left
+			Vector3 FLRayOrigin, FRRayOrigin, BRRayOrigin, BLRayOrigin;
+			FLRayOrigin = FRRayOrigin = BRRayOrigin = BLRayOrigin = transform.position;
+			
+			//All of the ray origins start at the bottom of the player
+			FLRayOrigin.y = FRRayOrigin.y = BRRayOrigin.y = BLRayOrigin.y = transform.position.y - colliderHeight / 2f + leeway;
+			//Move Front-left and Back-left rays to the left side
+			FLRayOrigin.x = BLRayOrigin.x -= (colliderRadius - leeway);
+			//Move Front-right and Back-right rays to the right side
+			FRRayOrigin.x = BRRayOrigin.x += (colliderRadius - leeway);
+			//Move Front-left and Front-right rays to the front
+			FLRayOrigin.z = FRRayOrigin.z += (colliderRadius - leeway);
+			//Move Back-left and Back-right rays to the back
+			BLRayOrigin.z = BRRayOrigin.z -= (colliderRadius - leeway);
+
+			//Check a short distance below the player
+			float distance = 0.1f;
+
+			//Debug rays
+			Debug.DrawRay(FLRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(FRRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(BLRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(BRRayOrigin, Vector3.down * distance, Color.white, 0, false);
+
+			return (Physics.Raycast(FLRayOrigin, Vector3.down, distance) ||
+					Physics.Raycast(FRRayOrigin, Vector3.down, distance) ||
+					Physics.Raycast(BLRayOrigin, Vector3.down, distance) ||
+					Physics.Raycast(BRRayOrigin, Vector3.down, distance));
+        }
 	}
 }
