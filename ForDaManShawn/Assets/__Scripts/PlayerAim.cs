@@ -18,30 +18,120 @@ public class PlayerAim : MonoBehaviour {
 
 	Quaternion desiredRotation;
 
+	//TEST TODO
+	bool flipping, pPositiveY;
+	GravityTest playerGravity;
+	public float flipTime = 0.25f;
+
 	void Awake() {
 		playerTransform = transform.parent;
+		playerGravity = playerTransform.GetComponent<GravityTest>();
 
 		//Hide the mouse and lock it to the screen
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		//the player is not currently flipping
+		flipping = false;
+		pPositiveY = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//Get mouse movement input
-		x += Input.GetAxis("Mouse X") * xSensitivity;
-		y -= Input.GetAxis("Mouse Y") * ySensitivity;
+		if (!flipping) {
+			//Get mouse movement input
+			x += Input.GetAxis("Mouse X") * xSensitivity;
+			y -= Input.GetAxis("Mouse Y") * ySensitivity;
 
-		y = ClampRotation(y);
+			y = ClampRotation(y);
 
-		//Rotate the player in the y-direction but only the camera in the x-direction
-		playerTransform.rotation = Quaternion.Euler(0, x, 0);
-		transform.rotation = Quaternion.Euler(y, x, 0);
+			//Rotate the player in the y-direction but only the camera in the x-direction
+			bool gravityPositiveY = playerGravity.gravityPositiveY();
 
-        //Set the cursor back to visible if you hit escape
+			//gets the correct rotation on player
+			if (!pPositiveY && gravityPositiveY) { //take out if not finished
+				//start coroutine to flip to pos Y
+				flipping = true;
+				pPositiveY = true;
+				StartCoroutine("FlipPosY");
+			} else if(gravityPositiveY) { //when flipped
+				playerTransform.rotation = Quaternion.Euler(0 + 180, -x, 0);
+				transform.rotation = Quaternion.Euler(y + 180, -x, 0);
+			} else if (pPositiveY){ //take out if not finished
+				//start coroutine to flip to normal neg Y
+				flipping = true;
+				pPositiveY = false;
+				StartCoroutine("FlipNegY");
+			} else {
+				playerTransform.rotation = Quaternion.Euler(0, x, 0);
+				transform.rotation = Quaternion.Euler(y, x, 0);
+			}
+		}
+
+		//Set the cursor back to visible if you hit escape
         if (Input.GetKeyUp(KeyCode.Escape))
             Cursor.visible = !Cursor.visible;
-    }
+	}
+
+	IEnumerator FlipPosY() {
+		float timeIn;
+		float flipStartTime = Time.time;
+		float percentComp = 0;
+
+		while (percentComp < 1) {
+			//calculates the percent complete
+			timeIn = Time.time - flipStartTime;
+			percentComp = timeIn / flipTime;
+
+			if (percentComp > 1) {
+				percentComp = 1;
+			}
+
+			//Get mouse movement input
+			x += Input.GetAxis("Mouse X") * xSensitivity;
+			y -= Input.GetAxis("Mouse Y") * ySensitivity;
+
+			y = ClampRotation(y);
+
+			//Quaternion.Lerp(startpoint, endpoint, percentageBetweenTwoVal) //faster but used Slerp
+			playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0, x, 0), Quaternion.Euler(0 + 180, -x, 0), percentComp);
+			transform.rotation = Quaternion.Slerp(Quaternion.Euler(y, x, 0), Quaternion.Euler(y + 180, -x, 0), percentComp);
+
+			yield return new WaitForFixedUpdate();
+		}
+
+		flipping = false;
+	}
+
+	IEnumerator FlipNegY() {
+		float timeIn;
+		float flipStartTime = Time.time;
+		float percentComp = 0;
+
+		while (percentComp < 1) {
+			//calculates the percent complete
+			timeIn = Time.time - flipStartTime;
+			percentComp = timeIn / flipTime;
+
+			if (percentComp > 1) {
+				percentComp = 1;
+			}
+
+			//Get mouse movement input
+			x += Input.GetAxis("Mouse X") * xSensitivity;
+			y -= Input.GetAxis("Mouse Y") * ySensitivity;
+
+			y = ClampRotation(y);
+
+			//Quaternion.Lerp(startpoint, endpoint, percentageBetweenTwoVal) //faster but used Slerp
+			playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0 + 180, -x, 0), Quaternion.Euler(0, x, 0), percentComp);
+			transform.rotation = Quaternion.Slerp(Quaternion.Euler(y + 180, -x, 0), Quaternion.Euler(y, x, 0), percentComp);
+
+			yield return new WaitForFixedUpdate();
+		}
+
+		flipping = false;
+	}
 
 	float ClampRotation(float angle) {
 		//Ensure that the angle starts between -360 and 360 degrees
