@@ -14,12 +14,11 @@ public class PlayerMovement : MonoBehaviour {
 	float jumpImpulseForce_c = 6f;  //Initial impulse force applied to the jump
 	float jumpAcc_c = 5.5f;         //Acceleration force applied to jumps when the button is held
 
-
 	// Use this for initialization
 	void Awake () {
 		thisRigidbody = GetComponent<Rigidbody>();
-		colliderHeight = GetComponent<CapsuleCollider>().height;
-		colliderRadius = GetComponent<CapsuleCollider>().radius;
+		colliderHeight = GetComponent<CapsuleCollider>().height * transform.localScale.y;
+		colliderRadius = GetComponent<CapsuleCollider>().radius * transform.localScale.x;
 	}
 	
 	// Update is called once per frame
@@ -109,10 +108,10 @@ public class PlayerMovement : MonoBehaviour {
 			float distance = 0.1f;
 
 			//Debug rays
-			//Debug.DrawRay(FLRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			//Debug.DrawRay(FRRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			//Debug.DrawRay(BLRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			//Debug.DrawRay(BRRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(FLRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(FRRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(BLRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(BRRayOrigin, Vector3.down * distance, Color.white, 0, false);
 
 			return (Physics.Raycast(FLRayOrigin, -transform.up, distance) ||
 					Physics.Raycast(FRRayOrigin, -transform.up, distance) ||
