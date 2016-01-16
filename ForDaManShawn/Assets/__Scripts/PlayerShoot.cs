@@ -55,7 +55,25 @@ public class PlayerShoot : MonoBehaviour
         else
             laser.material = shootEnemy;
 
-		laser.enabled = true;
+        laser.material = new Material(Shader.Find("Particles/Additive"));
+        Color start = Color.white;
+        Color end = Color.white;
+        if (energyManager.playerEnergy > 500) {
+            start.a = 1f;
+            end.a = 1f;
+        } else if (energyManager.playerEnergy > 300) {
+            start.a = 0.6f;
+            end.a = 0.6f;
+        } else if (energyManager.playerEnergy > 100) {
+            start.a = 0.3f;
+            end.a = 0.3f;
+        } else {
+            start.a = 0.1f;
+            end.a = 0.1f;
+        }
+        laser.SetColors (start, end);
+
+        laser.enabled = true;
         laserPoints.Clear();
         Vector3 positionDiff = target.transform.position - gameObject.transform.position;
         //amount z will change per point
@@ -100,9 +118,6 @@ public class PlayerShoot : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-		if (target != null) {
-			energyManager.TransferEnergy(target);
-		}
         if (lockedOn)
         {
             renderLaser(target);
@@ -116,6 +131,7 @@ public class PlayerShoot : MonoBehaviour
 					lockedOn = true;
                     buttonPressed = true;
                     target = hitInfo.collider.gameObject;
+                    energyManager.TransferEnergy(target);
                 }
             }
         }
