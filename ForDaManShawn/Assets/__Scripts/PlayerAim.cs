@@ -22,7 +22,7 @@ public class PlayerAim : MonoBehaviour {
 		playerTransform = transform.parent;
 
 		//Hide the mouse and lock it to the screen
-		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 	}
 	

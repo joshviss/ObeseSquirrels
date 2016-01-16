@@ -11,9 +11,12 @@ public class PlayerShoot : MonoBehaviour
     LineRenderer laser;
     List<Vector3> laserPoints;
     public bool lockedOn;
+    public bool buttonPressed;
     public int pointCount;
 	public float rayDistance = 20;
 	public bool inCollider;
+
+    public LayerMask ignoreLayers;
 
     // Use this for initialization
     void Start()
@@ -24,6 +27,7 @@ public class PlayerShoot : MonoBehaviour
         laser.SetVertexCount(pointCount);
 		laserPoints = new List<Vector3>();
         lockedOn = false;
+        buttonPressed = false;
 		inCollider = false;
 
 		laser.enabled = false;
@@ -80,21 +84,25 @@ public class PlayerShoot : MonoBehaviour
         {
             renderLaser(target);
         }
-        if (Input.GetMouseButton(0) && (!lockedOn || inCollider))
+        if ((Input.GetMouseButtonDown(0) || (buttonPressed && Input.GetMouseButton(0))) && (!lockedOn || inCollider))
         {
-			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * 20, Color.blue, 0, true);
-            if (Physics.SphereCast(gameObject.transform.position, 5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~(1 << LayerMask.NameToLayer("Player"))))
+			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
+            if (Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("MusicTrigger")))))
             {
-				if (hitInfo.collider.gameObject.tag == "Enemy") {
+                print("Colliding with object: " + hitInfo.collider.gameObject.name);
+                if (hitInfo.collider.gameObject.tag == "Enemy") {
 					lockedOn = true;
-					target = hitInfo.collider.gameObject;
-				}
+                    buttonPressed = true;
+                    target = hitInfo.collider.gameObject;
+                }
             }
+            
         }
         else
         {
             lockedOn = false;
 			laser.enabled = false;
+            buttonPressed = false;
         }
     }
 
@@ -112,6 +120,7 @@ public class PlayerShoot : MonoBehaviour
 				target = null;
 				lockedOn = false;
 				laser.enabled = false;
+                buttonPressed = false;
 			}
 		}
 	}
