@@ -14,8 +14,13 @@ public class PlayerMovement : MonoBehaviour {
 	float jumpImpulseForce_c = 6f;  //Initial impulse force applied to the jump
 	float jumpAcc_c = 5.5f;         //Acceleration force applied to jumps when the button is held
 
+	//players gravity script
+	GravityTest playerGravity;
+
 	// Use this for initialization
 	void Awake () {
+		playerGravity = gameObject.GetComponent<GravityTest>();
+
 		thisRigidbody = GetComponent<Rigidbody>();
 		colliderHeight = GetComponent<CapsuleCollider>().height * transform.localScale.y;
 		colliderRadius = GetComponent<CapsuleCollider>().radius * transform.localScale.x;
@@ -70,14 +75,14 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	IEnumerator JumpCoroutine() {
 		//Initial impulse force applied to start the jump
-		thisRigidbody.AddForce(Vector3.up * jumpImpulseForce_c, ForceMode.VelocityChange);
+		thisRigidbody.AddForce(transform.up * jumpImpulseForce_c, ForceMode.VelocityChange);
 
 		float timeSinceJump = 0;
 		//While we haven't been jumping for too long and we are still holding the jump button
 		while (timeSinceJump < maxJumpDuration_c && Input.GetKey("space")) {
 
-			//Apply the upwards acceleration force to the rigidbody to prolong the jump
-			thisRigidbody.AddForce(Vector3.up * jumpAcc_c, ForceMode.Acceleration);
+			//Apply the "upwards" acceleration force to the rigidbody to prolong the jump
+			thisRigidbody.AddForce(transform.up * jumpAcc_c, ForceMode.Acceleration);
 
 			//Use fixedDeltaTime and FixedUpdate because of physics calculations
 			timeSinceJump += Time.fixedDeltaTime;
@@ -94,7 +99,7 @@ public class PlayerMovement : MonoBehaviour {
 			FLRayOrigin = FRRayOrigin = BRRayOrigin = BLRayOrigin = transform.position;
 			
 			//All of the ray origins start at the bottom of the player
-			FLRayOrigin.y = FRRayOrigin.y = BRRayOrigin.y = BLRayOrigin.y = transform.position.y - colliderHeight / 2f + leeway;
+			FLRayOrigin.y = FRRayOrigin.y = BRRayOrigin.y = BLRayOrigin.y = transform.position.y + (playerGravity.gravityPositiveY() ? -1 : 1)*(-colliderHeight / 2f + leeway);
 			//Move Front-left and Back-left rays to the left side
 			FLRayOrigin.x = BLRayOrigin.x -= (colliderRadius - leeway);
 			//Move Front-right and Back-right rays to the right side
@@ -105,13 +110,13 @@ public class PlayerMovement : MonoBehaviour {
 			BLRayOrigin.z = BRRayOrigin.z -= (colliderRadius - leeway);
 
 			//Check a short distance below the player
-			float distance = 0.1f;
+			float distance = .1f;
 
 			//Debug rays
-			Debug.DrawRay(FLRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			Debug.DrawRay(FRRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			Debug.DrawRay(BLRayOrigin, Vector3.down * distance, Color.white, 0, false);
-			Debug.DrawRay(BRRayOrigin, Vector3.down * distance, Color.white, 0, false);
+			Debug.DrawRay(FLRayOrigin, -transform.up * distance, Color.white, 0, false);
+			Debug.DrawRay(FRRayOrigin, -transform.up * distance, Color.white, 0, false);
+			Debug.DrawRay(BLRayOrigin, -transform.up * distance, Color.white, 0, false);
+			Debug.DrawRay(BRRayOrigin, -transform.up * distance, Color.white, 0, false);
 
 			return (Physics.Raycast(FLRayOrigin, -transform.up, distance) ||
 					Physics.Raycast(FRRayOrigin, -transform.up, distance) ||
