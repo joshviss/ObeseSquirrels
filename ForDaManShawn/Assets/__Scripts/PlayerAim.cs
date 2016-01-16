@@ -67,6 +67,10 @@ public class PlayerAim : MonoBehaviour {
 				transform.rotation = Quaternion.Euler(y, x, 0);
 			}
 		}
+
+		//Set the cursor back to visible if you hit escape
+        if (Input.GetKeyUp(KeyCode.Escape))
+            Cursor.visible = !Cursor.visible;
 	}
 
 	IEnumerator FlipPosY() {
