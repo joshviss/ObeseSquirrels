@@ -68,14 +68,14 @@ public class PlayerShoot : MonoBehaviour
             start.a = 1f;
             end.a = 1f;
         } else if (energyManager.playerEnergy > 300) {
+            start.a = 0.8f;
+            end.a = 0.8f;
+        } else if (energyManager.playerEnergy > 100) {
             start.a = 0.6f;
             end.a = 0.6f;
-        } else if (energyManager.playerEnergy > 100) {
+        } else {
             start.a = 0.3f;
             end.a = 0.3f;
-        } else {
-            start.a = 0.1f;
-            end.a = 0.1f;
         }
         laser.SetColors (start, end);
 
@@ -130,18 +130,18 @@ public class PlayerShoot : MonoBehaviour
         }
         bool hitSomething = Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("PlayerAreaOfEffect")) | (1 << LayerMask.NameToLayer("MusicTrigger") | (1 << LayerMask.NameToLayer("Landscape")))));
         if (hitSomething) {
-            if (hitInfo.collider.gameObject.tag == "Enemy") {
+            if (hitInfo.collider.gameObject.tag == "Enemy" && !laser.enabled) {
                 crosshairs.sprite = treasure;
-            } else if (hitInfo.collider.gameObject.tag == "ForceField") {
+            } else if ((hitInfo.collider.gameObject.tag == "ForceField") && (energyManager.playerEnergy > 0) && !laser.enabled) {
                 crosshairs.sprite = attack;
-            } else {
-                crosshairs.sprite = normal;
             }
+        } else {
+            crosshairs.sprite = normal;
         }
         if ((Input.GetMouseButtonDown(0) || (buttonPressed && Input.GetMouseButton(0))) && (!lockedOn || inCollider))
         {
 			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
-            if (Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("PlayerAreaOfEffect")) |(1 << LayerMask.NameToLayer("MusicTrigger") | (1 << LayerMask.NameToLayer("Landscape"))))))
+            if (hitSomething)
             {
                 print("Colliding with \"" + hitInfo.collider.gameObject.name + "\"");
                 if (hitInfo.collider.gameObject.tag == "Enemy" || hitInfo.collider.gameObject.tag == "ForceField") {
