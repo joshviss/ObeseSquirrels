@@ -47,7 +47,7 @@ public class Key : MonoBehaviour {
 		if (state == KeyState.notPickedUp && other.gameObject.tag == "Player") {
 			state = KeyState.onPlayer;
 			other.gameObject.GetComponent<PlayerMovement>().keyOnPlayer = this;
-            //SoundManager.myInstance.Play("Key_Get");
+            SoundManager.myInstance.Play("Key_Get");
 
 			//Tutorial key goes straight to the lock
 			if (name == "TutorialKey") {
@@ -142,11 +142,11 @@ public class Key : MonoBehaviour {
 			transform.position = Vector3.Lerp(startPos, lockPos, percent);
 			transform.rotation = Quaternion.Lerp(startRot, lockRot, percent);
 
-			t += Time.deltaTime;
-
 			if (t > enterLockTime) {
 				state = KeyState.inLock;
 			}
+			t += Time.deltaTime;
+
 			yield return 0;
 		}
 

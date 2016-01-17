@@ -31,7 +31,7 @@ public class UI : MonoBehaviour {
     }
 
     void Update () {
-        print(SceneManager.GetActiveScene().name);
+        //print(SceneManager.GetActiveScene().name);
         if (SceneManager.GetActiveScene().name != game) return;
         if (Input.GetKeyUp(KeyCode.P)) SceneManager.LoadScene(game);
         if (Input.GetKeyUp(KeyCode.Escape)) Application.Quit();

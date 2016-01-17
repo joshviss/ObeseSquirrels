@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	//constants
 	float movespeed_c = 5f;         //Cap for horizontal movement speed
-	float terminalVelocity_c = 30f;		//Cap for vertical movement speed
+	float terminalVelocity_c = 15f;		//Cap for vertical movement speed
 	float acc_c = 100f;              //How fast we get up to speed (horizontally)
 	float maxJumpDuration_c = 1f;   //Maximum amount of time to apply a force to the jump
 	float jumpImpulseForce_c = 6f;  //Initial impulse force applied to the jump

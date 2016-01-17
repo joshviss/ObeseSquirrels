@@ -25,6 +25,9 @@ public class Teleport : MonoBehaviour {
 		}
 
 		other.gameObject.transform.position = new Vector3(target.startPos.x, other.gameObject.transform.position.y, target.startPos.z);
+		if (name == "UpsideDown") {
+			other.gameObject.transform.position -= 10 * Vector3.up;
+		}
 		GameManager.S.playerInRoom = targetRoom;
 	}
 
