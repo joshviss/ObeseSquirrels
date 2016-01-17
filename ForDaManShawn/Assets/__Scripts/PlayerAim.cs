@@ -21,10 +21,6 @@ public class PlayerAim : MonoBehaviour {
 
 	Quaternion desiredRotation;
 
-	public float portalX;
-	public float portalY;
-	public float portalZ;
-
 	//TEST TODO
 	bool flipping, pPositiveY;
 	GravityTest playerGravity;
