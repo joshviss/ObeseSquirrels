@@ -53,7 +53,7 @@ public class PlayerShoot : MonoBehaviour
         }
 
         //Change laser based on target
-        laser.material = new Material(Shader.Find("Particles/Additive"));
+        laser.material = shootEnemy;
         Color start = Color.white;
         Color end = Color.white;
         if (target.tag == "ForceField") {
@@ -63,19 +63,8 @@ public class PlayerShoot : MonoBehaviour
             start = Color.blue;
             end = Color.blue;
         }
-        if (energyManager.playerEnergy > 500) {
-            start.a = 1f;
-            end.a = 1f;
-        } else if (energyManager.playerEnergy > 300) {
-            start.a = 0.8f;
-            end.a = 0.8f;
-        } else if (energyManager.playerEnergy > 100) {
-            start.a = 0.6f;
-            end.a = 0.6f;
-        } else {
-            start.a = 0.3f;
-            end.a = 0.3f;
-        }
+		end.a = start.a = Mathf.Lerp(0.25f, 1f, energyManager.playerEnergy / 400);
+		laser.material.color = new Color(laser.material.color.r, laser.material.color.g, laser.material.color.b, end.a);
         laser.SetColors (start, end);
 
         laser.enabled = true;
