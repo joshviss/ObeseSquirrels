@@ -43,7 +43,8 @@ public class Key : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		//If the player picked up this key, update the state to reflect it
+        print("OnTriggerEnter");
+        //If the player picked up this key, update the state to reflect it
 		if (state == KeyState.notPickedUp && other.gameObject.tag == "Player") {
 			state = KeyState.onPlayer;
 			other.gameObject.GetComponent<PlayerMovement>().keyOnPlayer = this;

@@ -100,9 +100,6 @@ public class PlayerShoot : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-		if (target != null) {
-			energyManager.TransferEnergy(target);
-		}
         if (lockedOn)
         {
             renderLaser(target);
@@ -110,12 +107,14 @@ public class PlayerShoot : MonoBehaviour
         if ((Input.GetMouseButtonDown(0) || (buttonPressed && Input.GetMouseButton(0))) && (!lockedOn || inCollider))
         {
 			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
-            if (Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("MusicTrigger")))))
+            if (Physics.SphereCast(gameObject.transform.position, 0.5f, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction, out hitInfo, rayDistance, ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("PlayerAreaOfEffect")) |(1 << LayerMask.NameToLayer("MusicTrigger") | (1 << LayerMask.NameToLayer("Landscape"))))))
             {
+                print("Colliding with \"" + hitInfo.collider.gameObject.name + "\"");
                 if (hitInfo.collider.gameObject.tag == "Enemy" || hitInfo.collider.gameObject.tag == "ForceField") {
 					lockedOn = true;
                     buttonPressed = true;
                     target = hitInfo.collider.gameObject;
+                    energyManager.TransferEnergy(target);
                 }
             }
         }
