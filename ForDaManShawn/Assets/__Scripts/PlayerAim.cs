@@ -5,6 +5,9 @@ using System.Collections;
 public class PlayerAim : MonoBehaviour {
 	public float xSensitivity = 3f;
 	public float ySensitivity = 3f;
+    public float portalX = 0.0f;
+    public float portalY = 0.0f;
+    public float portalZ = 0.0f;
 
 	float yAimMin = -80f;	//yAngle clamped between these two values
 	float yAimMax = 80f;    //so we aren't ever looking upside-down
