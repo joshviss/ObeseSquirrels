@@ -7,6 +7,7 @@ public class EnemyMovement : MonoBehaviour {
 	public float speed = 5f;
 	public float waitTime = 1f;
 	public Vector3 patrolPoint = new Vector3(5, 3, 4);
+	public bool dontPatrol = false;
 
 	Vector3 startPoint, curPoint;
 	bool patrolling, toPatrolPoint;
@@ -89,6 +90,10 @@ public class EnemyMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (dontPatrol) {
+			return;
+		}
+
 		//*********only need this below for patrolling ***********
 		if (!patrolling) {
 			patrolling = true;
