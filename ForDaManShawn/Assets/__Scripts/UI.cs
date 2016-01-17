@@ -15,7 +15,7 @@ public class UI : MonoBehaviour {
     void Awake () {
         title = "_Title_Screen";
         credit = "_Credits";
-        game = "_Scene_Main";
+        game = SceneManager.GetActiveScene().name;
     }
 
     void Start () {
@@ -31,7 +31,6 @@ public class UI : MonoBehaviour {
     }
 
     void Update () {
-        print(SceneManager.GetActiveScene().name);
         if (SceneManager.GetActiveScene().name != game) return;
         if (Input.GetKeyUp(KeyCode.P)) SceneManager.LoadScene(game);
         if (Input.GetKeyUp(KeyCode.Escape)) Application.Quit();
