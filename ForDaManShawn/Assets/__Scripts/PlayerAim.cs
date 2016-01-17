@@ -99,9 +99,9 @@ public class PlayerAim : MonoBehaviour {
 			y = ClampRotation(y);
 
 			//Quaternion.Lerp(startpoint, endpoint, percentageBetweenTwoVal) //faster but used Slerp
-			playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0, x, 0), Quaternion.Euler(0 + 180, -x, 0), percentComp);
+			playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0 + portalX, x + portalY, 0 + portalZ), Quaternion.Euler(0 + 180 + portalX, -x + portalY, 0 + portalZ), percentComp);
 			//playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0 + portalX, x + portalY, 0 + portalZ), Quaternion.Euler(0 + portalX + 0, x + 0 + portalY, 180 + portalZ), percentComp);
-			transform.rotation = Quaternion.Slerp(Quaternion.Euler(y, x, 0), Quaternion.Euler(y + 180, -x, 0), percentComp);
+			transform.rotation = Quaternion.Slerp(Quaternion.Euler(y + portalX, x + portalY, 0 + portalZ), Quaternion.Euler(y + 180 + portalX, -x + portalY, 0 + portalZ), percentComp);
 			//transform.rotation = Quaternion.Slerp(Quaternion.Euler(y + portalX, x + portalY, 0 + portalZ), Quaternion.Euler(-(180 + portalZ), x + 270 + portalY, -(y + portalX + 0)), percentComp);
 
 			yield return new WaitForFixedUpdate();
@@ -131,9 +131,9 @@ public class PlayerAim : MonoBehaviour {
 			y = ClampRotation(y);
 
 			//Quaternion.Lerp(startpoint, endpoint, percentageBetweenTwoVal) //faster but used Slerp
-			playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0 + 180, -x, 0), Quaternion.Euler(0, x, 0), percentComp);
+			playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0 + 180 + portalX, -x + portalY, 0 + portalZ), Quaternion.Euler(0 + portalX, x + portalY, 0 + portalZ), percentComp);
 			//playerTransform.rotation = Quaternion.Slerp(Quaternion.Euler(0 + 0 + portalX, x + 0 + portalY, 180 + portalZ), Quaternion.Euler(0 + portalX, x + portalY, 0 + portalZ), percentComp);
-			transform.rotation = Quaternion.Slerp(Quaternion.Euler(y + 180, -x, 0), Quaternion.Euler(y, x, 0), percentComp);
+			transform.rotation = Quaternion.Slerp(Quaternion.Euler(y + 180 + portalX, -x + portalY, 0 + portalZ), Quaternion.Euler(y + portalX, x + portalY, 0 + portalZ), percentComp);
 			//transform.rotation = Quaternion.Slerp(Quaternion.Euler(-(180 + portalZ), x + 270 + portalY, -(y + 0 + portalX)), Quaternion.Euler(y + portalX, x + portalY, 0 + portalZ), percentComp);
 
 			yield return new WaitForFixedUpdate();
