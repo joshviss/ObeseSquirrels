@@ -17,6 +17,8 @@ public class SoundManager : MonoBehaviour {
     public AudioSource musicChannel4;
     public AudioSource musicChannel5;
     public AudioSource sfxChannel1;
+	public AudioSource sfxChannel2;
+	public AudioSource sfxChannel3;
 
     public Sound_Pair[] sounds;
     private Dictionary<string, AudioClip> soundDict;
@@ -84,6 +86,16 @@ public class SoundManager : MonoBehaviour {
                 sfxChannel1.pitch = 1;
                 sfxChannel1.Play();
                 break;
+			case 7:
+				sfxChannel2.clip = soundDict[soundName];
+				sfxChannel2.pitch = 1;
+				sfxChannel2.Play();
+				break;
+			case 8:
+				sfxChannel3.clip = soundDict[soundName];
+				sfxChannel3.pitch = 1;
+				sfxChannel3.Play();
+				break;
             default:
                 Debug.LogError("Nah man, \"" + soundName + "\" doesn't exist.");
                 break;
@@ -106,6 +118,10 @@ public class SoundManager : MonoBehaviour {
                 return musicChannel5;
             case 6:
                 return sfxChannel1;
+			case 7:
+				return sfxChannel2;
+			case 8:
+				return sfxChannel3;
             default:
                 Debug.LogError("Nah man, \"" + soundName + "\" doesn't exist.");
                 return null;
@@ -123,10 +139,14 @@ public class SoundManager : MonoBehaviour {
             return 4;
         if (soundName == "finalRoom")
             return 5;
-        if (soundName == "Forcefield_Down" || soundName == "Key_Get")
+        if (soundName == "Forcefield_Down" || soundName == "Key_Get" || soundName == "Collectable_Get") //all after Key_Get
             return 6;
+		if (soundName == "Gun_Shoot_Force_Field3" || soundName == "Gun_Shoot_Force_Field2" || soundName == "Out_Of_Energy")
+			return 7;
+		if (soundName == "Key_Unlock")
+			return 8;
 
-        else return 0;
+		else return 0;
     }
 
 	// Update is called once per frame

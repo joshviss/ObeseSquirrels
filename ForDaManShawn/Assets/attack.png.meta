@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: d8b05a22955cd0c4cb2ef8c9da3cc0f7
-timeCreated: 1452963450
+timeCreated: 1453009438
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -39,12 +39,12 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.49690592, y: 0.6072607}
-  spriteBorder: {x: 336, y: 306, z: 342, w: 171}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 8
@@ -54,32 +54,23 @@ TextureImporter:
     - name: attack_0
       rect:
         serializedVersion: 2
-        x: 338
-        y: 308
-        width: 119
-        height: 120
+        x: 278
+        y: 189
+        width: 225
+        height: 221
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 39.5, y: -54}
-        - {x: 38.5, y: -46}
-        - {x: 55.5, y: -22}
-        - {x: 54.5, y: -20}
-        - {x: 59.5, y: -13}
-        - {x: 59.5, y: 37}
-        - {x: 45.5, y: 57}
-        - {x: 30.5, y: 60}
-        - {x: -13.5, y: 60}
-        - {x: -37.5, y: 42}
-        - {x: -59.5, y: 27}
-        - {x: -59.5, y: -43}
-        - {x: -35.5, y: -57}
-        - {x: -18.5, y: -60}
-        - {x: 3.5, y: -60}
-        - {x: 6.5, y: -53}
-        - {x: 9.5, y: -40}
-        - {x: 36.5, y: -56}
+      - - {x: -65.5, y: 107.5}
+        - {x: -90.5, y: 83.5}
+        - {x: -106.5, y: 42.5}
+        - {x: -106.5, y: -60.5}
+        - {x: -89.5, y: -107.5}
+        - {x: 98.5, y: -107.5}
+        - {x: 108.5, y: -97.5}
+        - {x: 108.5, y: 41.5}
+        - {x: 63.5, y: 107.5}
     outline: []
   spritePackingTag: 
   userData: 
