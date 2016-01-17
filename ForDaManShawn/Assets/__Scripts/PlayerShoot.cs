@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerShoot : MonoBehaviour
     Collider areaOfEffect;
     LineRenderer laser;
     List<Vector3> laserPoints;
-    SpriteRenderer crosshairs;
+    Image crosshairs;
     public bool lockedOn;
     public bool buttonPressed;
     public int pointCount;
@@ -19,7 +20,7 @@ public class PlayerShoot : MonoBehaviour
     public Sprite treasure;
     public Sprite attack;
     public Sprite normal;
-
+    
     EnergyManage energyManager;
 
     public Material shootEnemy, shootForceField;
@@ -29,7 +30,7 @@ public class PlayerShoot : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<Camera>();
         areaOfEffect = GetComponentInChildren<Collider>();
-        crosshairs = GetComponentInChildren<SpriteRenderer>();
+        crosshairs = FindObjectOfType<Canvas>().transform.GetComponentInChildren<Image>();
         energyManager = GetComponent<EnergyManage>();
         laser = GetComponent<LineRenderer>();
         laser.SetVertexCount(pointCount);
@@ -122,7 +123,10 @@ public class PlayerShoot : MonoBehaviour
                 crosshairs.sprite = treasure;
             } else if ((hitInfo.collider.gameObject.tag == "ForceField") && (energyManager.playerEnergy > 0)) {
                 crosshairs.sprite = attack;
-            }
+			} else if ((hitInfo.collider.gameObject.tag == "ForceField") && (energyManager.playerEnergy <= 0)) {
+				//plays the out of energy sound effect because you have no energy
+				SoundManager.myInstance.Play("Out_Of_Energy");
+			}
         } else {
             crosshairs.sprite = normal;
         }
