@@ -34,6 +34,8 @@ public class Forcefield : MonoBehaviour {
 		if (health < 0) {
 			GetComponentInChildren<SphereCollider>().enabled = false;
 			barrier.Stop();
+            SoundManager.myInstance.Play("Forcefield_Down");
+            print("Playing sound!");
 		}
 	}
 }

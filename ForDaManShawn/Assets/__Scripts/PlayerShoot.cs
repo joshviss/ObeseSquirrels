@@ -42,7 +42,6 @@ public class PlayerShoot : MonoBehaviour
 
     void renderLaser(GameObject target)
     {
-		print("renderLaser");
         //Don't render the laser if the target was destroyed
         //or if the player has no energy and is shooting the force field
         if (target == null || (target.tag == "ForceField" && energyManager.playerEnergy <= 0)) {
@@ -132,7 +131,7 @@ public class PlayerShoot : MonoBehaviour
 			Debug.DrawRay(gameObject.transform.position, playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)).direction * rayDistance, Color.blue, 0, true);
             if (hitSomething)
             {
-                print("Colliding with \"" + hitInfo.collider.gameObject.name + "\"");
+                //print("Colliding with \"" + hitInfo.collider.gameObject.name + "\"");
                 if (hitInfo.collider.gameObject.tag == "Enemy" || hitInfo.collider.gameObject.tag == "ForceField") {
 					lockedOn = true;
                     buttonPressed = true;

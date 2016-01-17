@@ -16,6 +16,7 @@ public class SoundManager : MonoBehaviour {
     public AudioSource musicChannel3;
     public AudioSource musicChannel4;
     public AudioSource musicChannel5;
+    public AudioSource sfxChannel1;
 
     public Sound_Pair[] sounds;
     private Dictionary<string, AudioClip> soundDict;
@@ -78,6 +79,11 @@ public class SoundManager : MonoBehaviour {
                 musicChannel5.pitch = 1;
                 musicChannel5.Play();
                 break;
+            case 6:
+                sfxChannel1.clip = soundDict[soundName];
+                sfxChannel1.pitch = 1;
+                sfxChannel1.Play();
+                break;
             default:
                 Debug.LogError("Nah man, \"" + soundName + "\" doesn't exist.");
                 break;
@@ -98,6 +104,8 @@ public class SoundManager : MonoBehaviour {
                 return musicChannel4;
             case 5:
                 return musicChannel5;
+            case 6:
+                return sfxChannel1;
             default:
                 Debug.LogError("Nah man, \"" + soundName + "\" doesn't exist.");
                 return null;
@@ -115,6 +123,8 @@ public class SoundManager : MonoBehaviour {
             return 4;
         if (soundName == "finalRoom")
             return 5;
+        if (soundName == "Forcefield_Down" || soundName == "Key_Get")
+            return 6;
 
         else return 0;
     }
