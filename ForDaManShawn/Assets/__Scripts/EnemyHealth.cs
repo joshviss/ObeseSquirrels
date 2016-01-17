@@ -12,7 +12,9 @@ public class EnemyHealth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        if (curHealth <= 0)
-            Destroy(gameObject);
+		if (curHealth <= 0) {
+			SoundManager.myInstance.Play("Collectable_Get");
+			Destroy(gameObject);
+		}
 	}
 }

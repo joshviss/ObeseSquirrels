@@ -13,10 +13,12 @@ public class EnergyManage : MonoBehaviour {
 
     public void TransferEnergy(GameObject target) {
         if (target.tag == "Enemy") {
+			SoundManager.myInstance.Play("Gun_Shoot_Collectable3");
             playerEnergy += energyTransferRate;
             target.GetComponent<EnemyHealth>().curHealth -= energyTransferRate;
         }
         else if (target.tag == "ForceField") {
+			SoundManager.myInstance.Play("Gun_Shoot_Force_Field2");
             playerEnergy -= 2 * energyTransferRate;
             target.GetComponentInParent<Forcefield>().health -= 2 * energyTransferRate;
 
