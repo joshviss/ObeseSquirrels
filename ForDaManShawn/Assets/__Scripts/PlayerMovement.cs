@@ -125,4 +125,10 @@ public class PlayerMovement : MonoBehaviour {
 					Physics.Raycast(BRRayOrigin, -transform.up, distance));
         }
 	}
+
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "DeathCollider") {
+            gameObject.transform.position = GameObject.Find("SpawnPoint").transform.position;
+        }
+    }
 }
