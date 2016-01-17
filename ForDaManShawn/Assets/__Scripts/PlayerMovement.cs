@@ -10,7 +10,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	//constants
 	float movespeed_c = 5f;         //Cap for horizontal movement speed
-	float acc_c = 50f;              //How fast we get up to speed (horizontally)
+	float terminalVelocity_c = 30f;		//Cap for vertical movement speed
+	float acc_c = 100f;              //How fast we get up to speed (horizontally)
 	float maxJumpDuration_c = 1f;   //Maximum amount of time to apply a force to the jump
 	float jumpImpulseForce_c = 6f;  //Initial impulse force applied to the jump
 	float jumpAcc_c = 5.5f;         //Acceleration force applied to jumps when the button is held
@@ -55,6 +56,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		//Cap the horizontal movement speed so the player is not moving faster than movespeed_c
 		CapHorizontalMovementSpeed();
+		CapVerticalMovementSpeed();
 	}
 
 	void Move(Vector3 direction) {
@@ -69,6 +71,13 @@ public class PlayerMovement : MonoBehaviour {
 			groundVelocity = groundVelocity.normalized * movespeed_c;
 			thisRigidbody.velocity = new Vector3(groundVelocity.x, thisRigidbody.velocity.y, groundVelocity.y);
 		}
+	}
+	void CapVerticalMovementSpeed() {
+		Vector3 curVel = thisRigidbody.velocity;
+		if (Mathf.Abs(curVel.y) > terminalVelocity_c) {
+			curVel.y = Mathf.Sign(curVel.y) * terminalVelocity_c;
+		}
+		thisRigidbody.velocity = curVel;
 	}
 
 	void Jump() {

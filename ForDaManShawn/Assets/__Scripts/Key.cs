@@ -47,7 +47,12 @@ public class Key : MonoBehaviour {
 		if (state == KeyState.notPickedUp && other.gameObject.tag == "Player") {
 			state = KeyState.onPlayer;
 			other.gameObject.GetComponent<PlayerMovement>().keyOnPlayer = this;
-            SoundManager.myInstance.Play("Key_Get");
+            //SoundManager.myInstance.Play("Key_Get");
+
+			//Tutorial key goes straight to the lock
+			if (name == "TutorialKey") {
+				state = KeyState.inLobby;
+			}
 			return;
 		}
 
@@ -116,6 +121,9 @@ public class Key : MonoBehaviour {
 			case "NatureKey":
 				targetLockName = "NatureLock";
 				break;
+			case "TutorialKey":
+				targetLockName = "TutorialLock";
+				break;
 		}
 		GameObject lockGO = GameObject.Find(targetLockName);
 		Vector3 lockPos = lockGO.transform.position + 0.5f*lockGO.transform.up;
@@ -156,7 +164,12 @@ public class Key : MonoBehaviour {
 			yield return 0;
 		}
 
-		Lobby.S.numKeysInLock = Lobby.S.numKeysInLock + 1;
+		if (name != "TutorialKey") {
+			Lobby.S.numKeysInLock = Lobby.S.numKeysInLock + 1;
+		}
+		else {
+			TutorialRoom.S.UnlockLobbyDoor();
+		}
 
 		inEnterLockCoroutine = false;
 	}

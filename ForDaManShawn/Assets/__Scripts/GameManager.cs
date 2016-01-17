@@ -5,6 +5,15 @@ public class GameManager : MonoBehaviour {
 	public static GameManager S;    //Singleton reference
 
 	public PlayerMovement playerMovement;
+	public enum Room {
+		Tutorial,
+		Lobby,
+		AC,
+		Future,
+		Nature,
+		Final
+	}
+	public Room playerInRoom = Room.Tutorial;
 
 	// Use this for initialization
 	void Awake () {

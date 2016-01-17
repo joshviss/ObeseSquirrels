@@ -29,6 +29,10 @@ public class ACLevel : MonoBehaviour {
 	}
 
 	void Update() {
+		if (GameManager.S.playerInRoom != GameManager.Room.AC) {
+			return;
+		}
+
 		if (!playerHasOneCollectible && playerEnergy.playerEnergy >= 100) {
 			playerHasOneCollectible = true;
 			firstWall.SetActive(false);

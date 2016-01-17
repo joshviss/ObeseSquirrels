@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Teleport : MonoBehaviour {
+	public GameManager.Room targetRoom;
 	public PortalCameras target;
     public static bool triggered = false;
     float cdTimer = 1f;
@@ -24,6 +25,7 @@ public class Teleport : MonoBehaviour {
 		}
 
 		other.gameObject.transform.position = new Vector3(target.startPos.x, other.gameObject.transform.position.y, target.startPos.z);
+		GameManager.S.playerInRoom = targetRoom;
 	}
 
     void Update () {
