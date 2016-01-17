@@ -122,7 +122,10 @@ public class PlayerShoot : MonoBehaviour
                 crosshairs.sprite = treasure;
             } else if ((hitInfo.collider.gameObject.tag == "ForceField") && (energyManager.playerEnergy > 0)) {
                 crosshairs.sprite = attack;
-            }
+			} else if ((hitInfo.collider.gameObject.tag == "ForceField") && (energyManager.playerEnergy <= 0)) {
+				//plays the out of energy sound effect because you have no energy
+				SoundManager.myInstance.Play("Out_Of_Energy");
+			}
         } else {
             crosshairs.sprite = normal;
         }

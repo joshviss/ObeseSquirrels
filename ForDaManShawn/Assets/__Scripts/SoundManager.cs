@@ -141,7 +141,7 @@ public class SoundManager : MonoBehaviour {
             return 5;
         if (soundName == "Forcefield_Down" || soundName == "Key_Get" || soundName == "Collectable_Get") //all after Key_Get
             return 6;
-		if (soundName == "Gun_Shoot_Force_Field3" || soundName == "Gun_Shoot_Force_Field2" || soundName == "Out_Of_Energy")
+		if (soundName == "Gun_Shoot_Collectable3" || soundName == "Gun_Shoot_Force_Field2" || soundName == "Out_Of_Energy")
 			return 7;
 		if (soundName == "Key_Unlock")
 			return 8;

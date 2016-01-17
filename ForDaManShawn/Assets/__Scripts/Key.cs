@@ -145,6 +145,9 @@ public class Key : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 		print("Turning key");
 
+		//plays the key turning sfx
+		SoundManager.myInstance.Play("Key_Unlock");
+
 		//Turn the key. Like Bob Segar. Wait, no that's Turn the Page. Disregard.
 		t = 0;
 		while (t < keyTurnTime) {
