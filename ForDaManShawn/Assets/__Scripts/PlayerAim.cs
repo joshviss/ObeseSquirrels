@@ -58,16 +58,16 @@ public class PlayerAim : MonoBehaviour {
 				pPositiveY = true;
 				StartCoroutine("FlipPosY");
 			} else if(gravityPositiveY) { //when flipped
-				playerTransform.rotation = Quaternion.Euler(0 + 180, -x, 0);
-				transform.rotation = Quaternion.Euler(y + 180, -x, 0);
+				playerTransform.rotation = Quaternion.Euler(180 + portalX, -x + portalY, portalZ);
+				transform.rotation = Quaternion.Euler(y + 180 + portalX, -x + portalY, portalZ);
 			} else if (pPositiveY){ //take out if not finished
 				//start coroutine to flip to normal neg Y
 				flipping = true;
 				pPositiveY = false;
 				StartCoroutine("FlipNegY");
 			} else {
-				playerTransform.rotation = Quaternion.Euler(0, x, 0);
-				transform.rotation = Quaternion.Euler(y, x, 0);
+				playerTransform.rotation = Quaternion.Euler(portalX, x + portalY, portalZ);
+				transform.rotation = Quaternion.Euler(y + portalX, x + portalY, portalZ);
 			}
 		}
 

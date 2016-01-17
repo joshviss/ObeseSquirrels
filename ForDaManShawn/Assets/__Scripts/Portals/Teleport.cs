@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Teleport : MonoBehaviour {
+	public PortalCameras target;
     public static bool triggered = false;
     float cdTimer = 1f;
     float timer;
@@ -17,6 +18,14 @@ public class Teleport : MonoBehaviour {
         objectRot = Quaternion.Euler(finalRot.x, finalRot.y, finalRot.z);
     }
 
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.tag != "Player") {
+			return;
+		}
+
+		other.gameObject.transform.position = new Vector3(target.startPos.x, other.gameObject.transform.position.y, target.startPos.z);
+	}
+
     void Update () {
         if (triggered) {
             print(triggered);
@@ -28,27 +37,27 @@ public class Teleport : MonoBehaviour {
             }
         }
     }
-    void OnCollisionEnter (Collision collision) {
-        if (!triggered) {
-            print(collision.collider.name);
-            triggered = true;
-            collision.transform.position = endPortal.position + posOffset;
-            //            Quaternion curRot = collision.transform.rotation;
-            //            collision.transform.Rotate(finalRot.x, finalRot.y, finalRot.z, Space.World);
-            //            collision.transform.rotation = curRot * objectRot;
+ //   void OnCollisionEnter (Collision collision) {
+ //       if (!triggered) {
+ //           print(collision.collider.name);
+ //           triggered = true;
+ //           collision.transform.position = endPortal.position + posOffset;
+ //           //            Quaternion curRot = collision.transform.rotation;
+ //           //            collision.transform.Rotate(finalRot.x, finalRot.y, finalRot.z, Space.World);
+ //           //            collision.transform.rotation = curRot * objectRot;
 
-            if (collision.collider.name == "Player") {
-                Camera portCam = endPortal.GetChild(0).GetComponent<Camera>();
-                var portRot = portCam.transform.rotation.eulerAngles;
-                var tempRot = collision.collider.transform.rotation.eulerAngles;
+ //           if (collision.collider.name == "Player") {
+ //               Camera portCam = endPortal.GetChild(0).GetComponent<Camera>();
+ //               var portRot = portCam.transform.rotation.eulerAngles;
+ //               var tempRot = collision.collider.transform.rotation.eulerAngles;
  
-                var temp = collision.collider.transform.GetChild(0);
-                PlayerAim aim = temp.GetComponent<PlayerAim> ();
- //               var endRot = endPortal.transform.rotation.eulerAngles;
-                aim.portalX += portRot.x;
-                aim.portalY += -portRot.y;
-                aim.portalZ += portRot.z;
-            }
-        }
-    }
+ //               var temp = collision.collider.transform.GetChild(0);
+ //               PlayerAim aim = temp.GetComponent<PlayerAim> ();
+ ////               var endRot = endPortal.transform.rotation.eulerAngles;
+ //               aim.portalX += portRot.x;
+ //               aim.portalY += -portRot.y;
+ //               aim.portalZ += portRot.z;
+ //           }
+ //       }
+ //   }
 }

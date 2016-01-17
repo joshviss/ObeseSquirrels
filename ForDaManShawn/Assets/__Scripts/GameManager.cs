@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 	public PlayerMovement playerMovement;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		S = this;
 		playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
 
