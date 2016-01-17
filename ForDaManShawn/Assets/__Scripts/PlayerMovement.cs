@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
+	public Key keyOnPlayer;
 	Rigidbody thisRigidbody;
 
 	float colliderHeight;           //Determined once then stored so we don't have to check the collider component often
