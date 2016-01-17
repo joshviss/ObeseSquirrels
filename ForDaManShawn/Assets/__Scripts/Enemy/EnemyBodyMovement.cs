@@ -109,8 +109,7 @@ public class EnemyBodyMovement : MonoBehaviour {
 			patrolling = true;
 			//gets the current position to start patrol
 			curPoint = transform.localPosition;
-			//debug
-			print(curPoint);
+			
 			if (startingDirection) { //patrols to patrol point
 				StartCoroutine("goToPP");
 			} else { //patrols to start point
