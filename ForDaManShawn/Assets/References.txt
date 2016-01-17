@@ -1,3 +1,14 @@
 music:
 
 prologue - http://opengameart.org/content/epic-fantasy-music
+
+
+SFX:
+gun shooting at collectable - http://freesound.org
+gun shooting at force field - http://freesound.org
+key get - http://freesound.org
+collectable get - http://freesound.org
+key unlock - http://freesound.org
+door open - http://freesound.org
+out of energy - http://freesound.org
+force field down - http://freesound.org
