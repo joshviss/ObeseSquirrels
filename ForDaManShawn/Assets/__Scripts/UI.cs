@@ -5,12 +5,18 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class UI : MonoBehaviour {
-    public enum levels { Title, Game, Credit };
-    public string title;    //name of scene of title
-    public string credit;   //name of scene of credits
-    public string game;     //name of scene of main game
-    string path = "Button"; //path of prefab
+//    public enum levels { Title, Game, Credit };
+    string title;    //name of scene of title
+    string credit;   //name of scene of credits
+    string game;     //name of scene of main game
+//    string path = "Button"; //path of prefab
     Canvas curCanvas;
+
+    void Awake () {
+        title = "_Title_Screen";
+        credit = "_Credits";
+        game = "_Scene_Main";
+    }
 
     void Start () {
         string curScene = EditorSceneManager.GetActiveScene().name;
@@ -22,7 +28,13 @@ public class UI : MonoBehaviour {
         } else if (curScene == game) {
             Game_Initialization();
         }
+    }
 
+    void Update () {
+        print(SceneManager.GetActiveScene().name);
+        if (SceneManager.GetActiveScene().name != game) return;
+        if (Input.GetKeyUp(KeyCode.P)) SceneManager.LoadScene(game);
+        if (Input.GetKeyUp(KeyCode.Escape)) Application.Quit();
     }
 
     void Title_Initialization() {
@@ -77,18 +89,4 @@ public class UI : MonoBehaviour {
         }
     }
 */    
-/*
-    public void Loadlevel(levels x) {
-        SceneManager.GetSceneAt((int)x);
-    }
-
-    public void OnClick() {
-        print("test");
-        SceneManager.GetSceneAt((int)levels.Game);
-    }
-
-    public void Quit() {
-        Application.Quit();
-    }
-*/
 }
